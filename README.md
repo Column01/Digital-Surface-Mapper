@@ -86,8 +86,10 @@ The python script is written for Python 3.8 or newer. Please ensure you install 
 
 - `printrun`
 - `scipy`
+- `matplotlib`
+- `pycairo`
 
-Install dependencies using `pip install printrun scipy` or `python -m pip install printrun scipy`
+Install dependencies using `pip install printrun scipy matplotlib pycairo` or `python -m pip install printrun scipy matplotlib pycairo`
 
 #### Running the program
 
