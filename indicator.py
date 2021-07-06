@@ -47,7 +47,6 @@ class IndicatorReader:
         for _ in range(num_readings):
             readings.append(self.get_reading())
             sleep(time_between)
-        
         return readings
 
 

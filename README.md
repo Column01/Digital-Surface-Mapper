@@ -85,8 +85,9 @@ The python script is written for Python 3.8 or newer. Please ensure you install 
 #### Dependencies
 
 - `printrun`
+- `scipy`
 
-Install dependencies using `pip install printrun` or `python -m pip install printrun`
+Install dependencies using `pip install printrun scipy` or `python -m pip install printrun scipy`
 
 #### Running the program
 
