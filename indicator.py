@@ -36,7 +36,7 @@ class IndicatorReader:
 
 
 if __name__ == "__main__":
-    com_ports = [comport.device for comport in serial.tools.list_ports.comports()]
+    com_ports = ["- " + comport.device for comport in serial.tools.list_ports.comports()]
     print("Choose your com port:")
     print("\n".join(com_ports))
     com_port = input("Type full comport name: ")
