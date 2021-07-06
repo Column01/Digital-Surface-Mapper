@@ -1,9 +1,10 @@
 # Digital-Surface-Mapper
 
-Python and arduino program to map a surface with a cheap dial indicator
+Python and arduino program to map a surface with a cheap dial indicator and a 3D printer running marlin firmware.
 **I am not responsible for any damage to hardware when doing this. Proceed at your own risk**
 
-### Table of Contents
+## Table of Contents
+
 - [Hardware](#hardware)
 - [Wiring](#wiring)
 - [Software](#software)
@@ -75,7 +76,7 @@ Once wires are attached, you need to connect them to the arduino in the followin
 
 Open the `.ino` file in the arduino IDE and select the correct COM port, and arduino version. Then just upload the sketch and it should be ready to go.
 
-The arudino code is modified from a project by Paweł Stawicki. You can see it hosted on github here: https://github.com/stawel/dialIndicatorToSerial
+The arudino code is modified from a project by Paweł Stawicki. You can see it hosted on github [here](https://github.com/stawel/dialIndicatorToSerial)
 
 ### Using the python script
 
@@ -83,8 +84,9 @@ The python script is written for Python 3.8 or newer. Please ensure you install 
 
 #### Dependencies
 
-- `pyserial`
-  - Install using `pip install pyserial` or `python -m pip install pyserial`
+- `printrun`
+
+Install dependencies using `pip install printrun` or `python -m pip install printrun`
 
 #### Running the program
 
