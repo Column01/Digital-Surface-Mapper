@@ -1,8 +1,28 @@
-import time
+import re
+import threading
+
 import serial.tools.list_ports
+from printrun.eventhandler import PrinterEventHandler
 from printrun.printcore import printcore
 
 from indicator import IndicatorReader
+
+ok_received = threading.Condition()
+
+
+class RecvHandler(PrinterEventHandler):
+    def __init__(self):
+        PrinterEventHandler.__init__(self)
+        self.clear()
+    
+    def clear(self):
+        self.printer_response = []
+    
+    def on_recv(self, ln):
+        self.printer_response.append(ln)
+        if ln.startswith('ok'):
+            with ok_received:
+                ok_received.notify()
 
 
 class SurfaceMapper:
@@ -16,7 +36,9 @@ class SurfaceMapper:
         self.printer = None
         self.indicator = None
 
-        self.ok_count = 0
+        self.max_x = self.max_y = self.max_z = 0.0
+
+        self.recv_handler = RecvHandler()
     
     def connect_printer(self):
         """Connects to the printer using Printcore
@@ -25,7 +47,7 @@ class SurfaceMapper:
             self.printer.disconnect()
             self.printer = None
         self.printer = printcore(self.printer_port, self.printer_baud)
-        self.printer.recvcb = self.recv_callback
+        self.printer.addEventHandler(self.recv_handler)
         while not self.printer.online:
             continue
 
@@ -36,19 +58,23 @@ class SurfaceMapper:
             self.indicator = None
         self.indicator = IndicatorReader(self.indicator_port, self.indicator_baud)
         self.indicator.connect()
-    
-    def recv_callback(self, line):
-        if 'ok' in line:
-            self.ok_count += 1
 
-    def wait_for_ok(self, num_oks):
-        while self.ok_count < num_oks:
-            time.sleep(0.1)
+    def wait_for_ok(self):
+        with ok_received:
+            ok_received.wait()
 
-    def send_gcode_and_wait(self, gcode, num_oks=1):
-        self.ok_count = 0
+    def send(self, gcode):
+        self.recv_handler.clear()
         self.printer.send(gcode)
-        self.wait_for_ok(num_oks)
+        self.wait_for_ok()
+    
+    def get_max_size(self):
+        self.send("M211")
+        for ln in self.recv_handler.printer_response:
+            ln.replace("\n", "").strip()
+            m = re.search(r'Max:\s+X([\d.-]+)\sY([\d.-]+)\sZ([\d.-]+)', ln)
+            if m:
+                self.max_x, self.max_y, self.max_z = [float(f) for f in m.groups()]
 
 
 if __name__ == "__main__":
@@ -79,8 +105,13 @@ if __name__ == "__main__":
     print("Connecting to printer...")
     surface_mapper.connect_printer()
     print("Homing printer...")
-    surface_mapper.send_gcode_and_wait("G28")
+    surface_mapper.send("G28")
     print("Printer homed")
+    print("Getting max printer size...")
+
+    surface_mapper.get_max_size()
+    if surface_mapper.max_x > 0.0:
+        print(surface_mapper.max_x, surface_mapper.max_y, surface_mapper.max_z)
 
     print("Connecting to indicator...")
     surface_mapper.connect_indicator()
