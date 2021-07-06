@@ -75,7 +75,7 @@ Once wires are attached, you need to connect them to the arduino in the followin
 
 Open the `.ino` file in the arduino IDE and select the correct COM port, and arduino version. Then just upload the sketch and it should be ready to go.
 
-The software is modified from a project by Paweł Stawicki. You can see it hosted on github here: https://github.com/stawel/dialIndicatorToSerial
+The arudino code is modified from a project by Paweł Stawicki. You can see it hosted on github here: https://github.com/stawel/dialIndicatorToSerial
 
 ### Using the python script
 
