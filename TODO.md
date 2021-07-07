@@ -63,6 +63,4 @@ else:
 
 print(f"Final part measurement at: x={part_xs[0]} y={part_ys[0]} is {actual_z}")
 
-# Fit the bed coordinates to a new polynomial that closely resembles a location on the part
-fitted = polynomial.polynomial.Polynomial.fit(bed_coordinates, part_coordinates)
 ```

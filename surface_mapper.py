@@ -116,4 +116,8 @@ if __name__ == "__main__":
     print("Connecting to indicator...")
     surface_mapper.connect_indicator()
     print("Getting some readings for testing...")
+    reading, unit = surface_mapper.indicator.get_reading()
+    if reading is None or unit is None:
+        quit("There seems to be a connection issue with the indicator. Please make sure it is connected and you selected the correct port.")
+
     print(surface_mapper.indicator.get_readings(10, 0.5))
